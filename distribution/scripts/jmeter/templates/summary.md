@@ -1,7 +1,6 @@
-# {{ parameters.application_name }} Performance Test Results
+# Ballerina Performance Test Results
 
-These are the performance test results of a [Netty](https://netty.io/) based Back-end service which echoes back any request
-posted to it after a specified period of time. This is the Back-end that is used in the performance tests of WSO2 products.
+During each release, we execute various automated performance test scenarios and publish the results.
 
 | Test Scenarios | Description |
 | --- | --- |
@@ -13,13 +12,16 @@ Our test client is [Apache JMeter](https://jmeter.apache.org/index.html). We tes
 time. We split the test results into warmup and measurement parts and use the measurement part to compute the
 performance metrics.
 
-We run the Back-end performance tests under different numbers of concurrent users, message sizes (payloads) and Back-end service
+A majority of test scenarios use a [Netty](https://netty.io/) based back-end service which echoes back any request
+posted to it after a specified period of time.
+
+We run the performance tests under different numbers of concurrent users, message sizes (payloads) and back-end service
 delays.
 
 The main performance metrics:
 
-1. **Throughput**: The number of requests that the {{ parameters.application_name }} processes during a specific time interval (e.g. per second).
-2. **Response Time**: The end-to-end latency for an operation of invoking an API. The complete distribution of response times was recorded.
+1. **Throughput**: The number of requests that the Ballerina service processes during a specific time interval (e.g. per second).
+2. **Response Time**: The end-to-end latency for an operation of invoking a Ballerina service. The complete distribution of response times was recorded.
 
 In addition to the above metrics, we measure the load average and several memory-related metrics.
 
@@ -31,21 +33,12 @@ The following are the test parameters.
 | Heap Size | The amount of memory allocated to the application | {{ parameters.heap_sizes|join(', ') }} |
 | Concurrent Users | The number of users accessing the application at the same time. | {{ parameters.concurrent_users|join(', ') }} |
 | Message Size (Bytes) | The request payload size in Bytes. | {{ parameters.message_sizes|join(', ') }} |
-| Back-end Delay (ms) | The delay added by the Back-end service. | {{ parameters.backend_sleep_times|join(', ') }} |
+| Back-end Delay (ms) | The delay added by the back-end service. | {{ parameters.backend_sleep_times|join(', ') }} |
 
 The duration of each test is **{{ parameters.test_duration }} seconds**. The warm-up period is **{{ parameters.warmup_time }} seconds**.
 The measurement results are collected after the warm-up period.
 
-The performance tests were executed on {{ parameters.number_of_stacks }} AWS CloudFormation stack{{ parameters.number_of_stacks|pluralize }}.
-{% for instance in instances %}
-System information for {{ parameters.application_name }} in {{ loop.index|humanize_ordinal }} AWS CloudFormation stack.
-
-| Class | Subclass | Description | Value |
-| --- | --- | --- | --- |
-{%- for system_info in instance.system_info %}
-| {{ system_info['class'] }} | {{ system_info['subclass'] }} | {{ system_info['description'] }} | {{ system_info['value'] }} |
-{%- endfor %}
-{%- endfor %}
+A [**{{ parameters.ballerina_ec2_instance_type }}** Amazon EC2 instance](https://aws.amazon.com/ec2/instance-types/) was used to install Ballerina.
 
 The following are the measurements collected from each performance test conducted for a given combination of
 test parameters.
